@@ -4,6 +4,7 @@ import ast
 import math
 import random
 import pytz
+from fuzzywuzzy import process
 from datetime import datetime, timedelta, date, time
 lock = asyncio.Lock()
 
@@ -16,7 +17,7 @@ from info import *
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InputMediaPhoto
 from pyrogram import Client, filters, enums
 from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid
-from utils import get_size, is_subscribed, get_poster, search_gagala, temp, get_settings, save_group_settings, get_shortlink, get_tutorial, send_all
+from utils import get_size, is_subscribed, get_poster, search_gagala, temp, get_settings, save_group_settings, get_shortlink, get_tutorial, send_all, imdb
 from database.users_chats_db import db
 from database.ia_filterdb import Media, get_file_details, get_search_results, get_bad_files
 from database.filters_mdb import del_all, find_filter, get_filters
@@ -1548,7 +1549,28 @@ async def cb_handler(client: Client, query: CallbackQuery):
             reply_markup = InlineKeyboardMarkup(buttons)
             await query.message.edit_reply_markup(reply_markup)
     await query.answer(MSG_ALRT)
-  
+
+async def ai_spell_check(chat_id, wrong_name):
+    try:  
+        async def search_movie(wrong_name):
+            search_results = imdb.search_movie(wrong_name)
+            movie_list = [movie['title'] for movie in search_results]
+            return movie_list
+        movie_list = await search_movie(wrong_name)
+        if not movie_list:
+            return
+        for _ in range(5):
+            closest_match = process.extractOne(wrong_name, movie_list)
+            if not closest_match or closest_match[1] <= 80:
+                return 
+            movie = closest_match[0]
+            files, offset, total_results = await get_search_results(chat_id=chat_id, query=movie)
+            if files:
+                return movie
+            movie_list.remove(movie)
+        return
+    except Exception as e:
+        print('Got error while searching movie in ai_spell_check', e)
 async def auto_filter(client, msg, spoll=False):
     curr_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
     # reqstr1 = msg.from_user.id if msg.from_user else 0
@@ -1583,7 +1605,16 @@ async def auto_filter(client, msg, spoll=False):
             settings = await get_settings(message.chat.id)
             if not files:
                 if settings["spell_check"]:
-                    return await advantage_spell_chok(client, msg)
+                    ai_sts = await message.reply_text('<b>Ai is Cheking For Your Spelling. Please Wait.</b>')
+                        is_misspelled = await ai_spell_check(chat_id = message.chat.id,wrong_name=search)
+                        if is_misspelled:
+                            await ai_sts.edit(f'<b>Ai Suggested <code>{is_misspelled}</code>\nSo Im Searching for <code>{is_misspelled}</code></b>')
+                            await asyncio.sleep(2)
+                            message.text = is_misspelled
+                            await ai_sts.delete()
+                            return await auto_filter(client, message)
+                        await ai_sts.delete()
+                        return await advantage_spell_chok(client, message)
                 else:
                     # if NO_RESULTS_MSG:
                     #     await client.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, search)))
