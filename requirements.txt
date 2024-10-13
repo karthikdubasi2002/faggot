@@ -11,17 +11,12 @@ git+https://github.com/Joelkb/cinemagoer
 datetime
 pytz
 aiohttp
-cinemagoer
-shortzy
 
 PyLeaves==1.0.2
 cinemagoer
 shortzy
 aiofiles
 pyromod==1.5
-
-telegraph
-openai
 
 jinja2
 apscheduler
