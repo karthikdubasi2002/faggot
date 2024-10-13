@@ -1579,28 +1579,23 @@ async def auto_filter(client, msg, spoll=False):
     if not spoll:
         message = msg
         if message.text.startswith("/"): return  # ignore commands
-        if re.findall("((^\/|^,|^!|^\.|^[\U0001F900-\U000E007F]).*)", message.text):
+        if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text):
             return
         if len(message.text) < 100:
             search = message.text
             search = search.lower()
             find = search.split(" ")
             search = ""
-            removes = ["in", "series", "thriller", "4k", "ott", "webseries", "hd", "hollywood", "and", "&", "bollywood", "dub", "mystery", "anime", "dubbed", "file", "web", "download", "movie", "film", "netflix", "link", "subtitles"]
+            removes = ["in","upload", "series", "full", "horror", "thriller", "mystery", "print", "file"]
             for x in find:
-                # if x == "in" or x == "series" or x == "full" or x == "horror" or x == "thriller" or x == "mystery" or x == "print" or x == "subtitle" or x == "subtitles":
-                #     continue
                 if x in removes:
                     continue
                 else:
                     search = search + x + " "
-            search = re.sub(r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|gib)(\sme)?)|movie(s)?|web\sseries|with\ssubtitle(s)?)", "", search, flags=re.IGNORECASE)
+            search = re.sub(r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|new|latest|bro|bruh|broh|helo|that|find|dubbed|link|venum|iruka|pannunga|pannungga|anuppunga|anupunga|anuppungga|anupungga|film|undo|kitti|kitty|tharu|kittumo|kittum|movie|any(one)|with\ssubtitle(s)?)", "", search, flags=re.IGNORECASE)
             search = re.sub(r"\s+", " ", search).strip()
             search = search.replace("-", " ")
-            search = search.replace(":", "")
-            search = search.replace("–", " ")
-            search = search.replace("complete", "com")
-            search = search.replace("combined", "com")
+            search = search.replace(":","")
             files, offset, total_results = await get_search_results(message.chat.id ,search, offset=0, filter=True)
             settings = await get_settings(message.chat.id)
             if not files:
@@ -1616,26 +1611,11 @@ async def auto_filter(client, msg, spoll=False):
                         await ai_sts.delete()
                         return await advantage_spell_chok(client, message)
                 else:
-                    # if NO_RESULTS_MSG:
-                    #     await client.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, search)))
                     return
-        else:
-            return
     else:
         message = msg.message.reply_to_message  # msg will be callback query
         search, files, offset, total_results = spoll
         settings = await get_settings(message.chat.id)
-        await msg.message.delete()
-    # if 'is_shortlink' in settings.keys():
-    #     ENABLE_SHORTLINK = settings['is_shortlink']
-    # else:
-    #     await save_group_settings(message.chat.id, 'is_shortlink', False)
-    #     ENABLE_SHORTLINK = False
-    # if 'is_tutorial' in settings.keys():
-    #     ENABLE_TUTORIAL = settings['is_tutorial']
-    # else:
-    #     await save_group_settings(message.chat.id, 'is_tutorial', False)
-    #     ENABLE_TUTORIAL = False
     pre = 'filep' if settings['file_secure'] else 'file'
     key = f"{message.chat.id}-{message.id}"
     FRESH[key] = search
