@@ -1,12 +1,9 @@
-FROM python:3.10.8-slim-buster
+FROM python:3.10
 
-RUN apt update && apt upgrade -y
-RUN apt install git -y
-COPY requirements.txt /requirements.txt
+RUN apt -qq update && apt -qq install -y git wget ffmpeg
+ 
+COPY . . 
 
-RUN cd /
-RUN pip3 install -U pip && pip3 install -U -r requirements.txt
-RUN mkdir /ben-url-filter-bot
-WORKDIR /ben-url-filter-bot
-COPY start.sh /start.sh
-CMD ["/bin/bash", "/start.sh"]
+RUN pip3 install -r requirements.txt 
+
+CMD ["python","bot.py"]
