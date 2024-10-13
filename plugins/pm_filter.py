@@ -49,8 +49,8 @@ async def pm_text(bot, message):
     if content.startswith("/") or content.startswith("#"): return  # ignore commands and hashtags
     if user_id in ADMINS: return # ignore admins
     await message.reply_text(
-         text=f"<b>🌟 Click Here For Any Movie, Series, Anime & More!!!👇 \n\n🌟 किसी भी मूवी, सीरीज, एनीमे और अधिक के लिए यहां क्लिक करें!!!👇</b>",   
-         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🎬 Click Here 🧤", url=f"https://telegram.me/heroflixofficial")]])
+         text=f"<b>🌟 Click Here For Any Movie, Series, Anime & More!!!ↆ \n\n🌟 किसी भी मूवी, सीरीज, एनीमे और अधिक के लिए यहां क्लिक करें!!!ↆ</b>",   
+         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🎬 Click Here 🧤", url=f"https://telegram.me/theheroflix")]])
     )
 
 @Client.on_callback_query(filters.regex(r"^next"))
@@ -194,10 +194,10 @@ async def next_page(bot, query):
     #     InlineKeyboardButton("Hᴏᴡ ᴛᴏ Dᴏᴡɴʟᴏᴀᴅ⚡", url=await get_tutorial(query.message.chat.id))
     # ])
     if settings["button"]:
-        cap = f"<b>🔆 Results For ➠ ‛{search}’👇\n\n<i>🗨 Select A Link & Press Start ↷</i>\n\n</b>"
+        cap = f"<b>🔆 Results For ➠ ‛<u>{search}</u>’ ↆ\n\n<i>🗨 Select A Link & Press Start ↷</i>\n\n</b>"
     else:
         # cap = f"<b>Hᴇʏ {query.from_user.mention}, Hᴇʀᴇ ɪs ᴛʜᴇ ʀᴇsᴜʟᴛ ғᴏʀ ʏᴏᴜʀ ᴏ̨ᴜᴇʀʏ {search} \n\n</b>"
-        cap = f"<b>🔆 Results For ➠ ‛{search}’👇\n\n<i>🗨 Select A Link & Press Start ↷</i>\n\n</b>"
+        cap = f"<b>🔆 Results For ➠ ‛<u>{search}</u>’ ↆ\n\n<i>🗨 Select A Link & Press Start ↷</i>\n\n</b>"
         for file in files:
             cap += f"<b>📙 ➔ <a href='https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}'>[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}\n\n</a></b>"
 
@@ -266,7 +266,7 @@ async def languages_cb_handler(client: Client, query: CallbackQuery):
         0,
         [
             InlineKeyboardButton(
-                text="👇 𝖲𝖾𝗅𝖾𝖼𝗍 𝖸𝗈𝗎𝗋 𝖫𝖺𝗇𝗀𝗎𝖺𝗀𝖾 👇", callback_data="ident"
+                text="ↆ 𝖲𝖾𝗅𝖾𝖼𝗍 𝖸𝗈𝗎𝗋 𝖫𝖺𝗇𝗀𝗎𝖺𝗀𝖾 ↆ", callback_data="ident"
             )
         ],
     )
@@ -460,7 +460,7 @@ async def seasons_cb_handler(client: Client, query: CallbackQuery):
         0,
         [
             InlineKeyboardButton(
-                text="👇 𝖲𝖾𝗅𝖾𝖼𝗍 Season 👇", callback_data="ident"
+                text="ↆ 𝖲𝖾𝗅𝖾𝖼𝗍 Season ↆ", callback_data="ident"
             )
         ],
     )
@@ -1600,10 +1600,10 @@ async def auto_filter(client, msg, spoll=False):
             settings = await get_settings(message.chat.id)
             if not files:
                 if settings["spell_check"]:
-                        ai_sts = await message.reply_text('<b>Ai is Cheking For Your Spelling. Please Wait.</b>')
+                        ai_sts = await message.reply_text('♻️ <b>Searching, Please Wait!</b>')
                         is_misspelled = await ai_spell_check(chat_id = message.chat.id,wrong_name=search)
                         if is_misspelled:
-                            await ai_sts.edit(f'<b>Ai Suggested <code>{is_misspelled}</code>\nSo Im Searching for <code>{is_misspelled}</code></b>')
+                            await ai_sts.edit(f'♻️ <b>Searching for <u>{is_misspelled}</u></b>')
                             await asyncio.sleep(2)
                             message.text = is_misspelled
                             await ai_sts.delete()
@@ -1734,10 +1734,10 @@ async def auto_filter(client, msg, spoll=False):
     #     )
     # else:
     if settings["button"]:
-        cap = f"<b>🔆 Results For ➠ ‛{search}’👇\n\n<i>🗨 Select A Link & Press Start ↷</i>\n\n</b>"
+        cap = f"<b>🔆 Results For ➠ ‛<u>{search}</u>’ ↆ\n\n<i>🗨 Select A Link & Press Start ↷</i>\n\n</b>"
     else:
         # cap = f"<b>Hᴇʏ {message.from_user.mention}, Hᴇʀᴇ ɪs ᴛʜᴇ ʀᴇsᴜʟᴛ ғᴏʀ ʏᴏᴜʀ ᴏ̨ᴜᴇʀʏ {search} \n\n</b>"
-        cap = f"<b>🔆 Results For ➠ ‛{search}’👇\n\n<i>🗨 Select A Link & Press Start ↷</i>\n\n</b>"
+        cap = f"<b>🔆 Results For ➠ ‛<u><u>{search}</u></u>’ ↆ\n\n<i>🗨 Select A Link & Press Start ↷</i>\n\n</b>"
         for file in files:
             cap += f"<b>📙 ➔ <a href='https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}'>[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}\n\n</a></b>"
 
@@ -1866,7 +1866,7 @@ async def advantage_spell_chok(client, msg):
         )
     ] for k, movie in enumerate(movielist)]
     btn.append([InlineKeyboardButton(text="×××× ⟨ Close ⟩ ××××", callback_data='close_data')])
-    k = await msg.reply("<b>❗Type Correct Name👇</b> \n<b>❗सही नाम टाइप करें👇</b>",
+    k = await msg.reply("<b>❗Type Correct Nameↆ</b> \n<b>❗सही नाम टाइप करेंↆ</b>",
                      reply_markup=InlineKeyboardMarkup(btn))
     await asyncio.sleep(60)
     await k.delete()
