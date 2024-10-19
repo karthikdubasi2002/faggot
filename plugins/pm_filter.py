@@ -1586,15 +1586,17 @@ async def auto_filter(client, msg, spoll=False):
             search = search.lower()
             find = search.split(" ")
             search = ""
-            removes = ["in","upload", "series", "full", "horror", "thriller", "mystery", "print", "file"]
+            removes = ["in","upload", "series", "and", "&", "hollywood", "audio", "language", "horror", "movi", "movie", "hd", "4k", "film", "seasons", "dub", "dubbed", "send", "dupped", "2k", "bollywood", "anime", "netflix", "print", "file"]
             for x in find:
                 if x in removes:
                     continue
                 else:
                     search = search + x + " "
-            search = re.sub(r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|new|latest|bro|bruh|broh|helo|that|find|dubbed|link|venum|iruka|pannunga|pannungga|anuppunga|anupunga|anuppungga|anupungga|film|undo|kitti|kitty|tharu|kittumo|kittum|movie|any(one)|full(movie)|with\ssubtitle(s)?)", "", search, flags=re.IGNORECASE)
+            search = re.sub(r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|bruh|broh|helo|venum|iruka|pannunga|pannungga|anuppunga|anupunga|anuppungga|anupungga|film|undo|kitti|kitty|tharu|kittumo|kittum|full\smovie|web\sseries|with\ssubtitle(s)?)", "", search, flags=re.IGNORECASE)
             search = re.sub(r"\s+", " ", search).strip()
             search = search.replace("-", " ")
+            search = search.replace("combined", "com")
+            search = search.replace("complete", "com")
             search = search.replace(":","")
             files, offset, total_results = await get_search_results(message.chat.id ,search, offset=0, filter=True)
             settings = await get_settings(message.chat.id)
@@ -1808,8 +1810,8 @@ async def advantage_spell_chok(client, msg):
     settings = await get_settings(msg.chat.id)
     find = mv_rqst.split(" ")
     query = ""
-    removes = ["in", "series", "download", "hd", "thriller", "4k", "and", "&", "hollywood", "session", "bollywood", "web", "episodes", "dub", "anime", "file" "movie", "film", "netflix", "dubbed", "link", "subtitles"]
-    for x in find:
+    removes = ["in","upload", "series", "and", "&", "hollywood", "audio", "language", "horror", "movi", "movie", "hd", "4k", "film", "seasons", "dub", "dubbed", "send", "dupped", "2k", "bollywood", "anime", "netflix", "print", "file"]
+            for x in find:
         if x in removes:
             continue
         else:
